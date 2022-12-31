@@ -14,11 +14,25 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
+//Forward declarations
+ADC_Init();
+
+//Function implementation
+ADC_Init() 
+{
+	ADMUX |= (1<<REFS0) | (1<<ADLAR) //REFS0 
+	ADC	
+}
 
 int main(void)
 {
     
-    /* Replace with your application code */
+    /* SETUP */
+	DDRC &= ~(1<<PC0); //Analog input (A0) ska vara input -> DVS 0.
+	DDRB |= 1; //FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX The three output registers.
+	ADC_Init();
+	
+	/* Main program */
     while (1) 
     {
 		
