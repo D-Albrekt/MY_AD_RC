@@ -20,8 +20,15 @@ ADC_Init();
 //Function implementation
 ADC_Init() 
 {
-	ADMUX |= (1<<REFS0) | (1<<ADLAR) //REFS0 
-	ADC	
+	ADMUX |= (1<<REFS0) | (1<<ADLAR) //REFS1:REFS0 = 01 => external reference voltage on AREF, ADLAR leftshifts the result.
+	ADCSRA |= (1<<ADEN) | (1<<ADPS0) | (1<<ADPS1) | (1<<ADPS2)	//ADEN = AD ENable; 
+	/*
+	BELOW YOU SEE THE CALCULATION FOR THE ADPSx.
+	ADPSX division factor between the system clock frequency and the input clock
+	to the ADC. Since the CPU clock = 16MHz and sample cycle = 13 => 
+	16 000 000 / 13 = 1 230 769 > 15 000 SPS => 1 230 769 /15 000 = 82. =>
+	ADPS > 82 => ADPS = 128 => ADPS0 = ADPS1 = ADPS2 = 1.
+	*/
 }
 
 int main(void)
