@@ -43,7 +43,7 @@ void ADC_Init()
 uint8_t ADC_read()
 {
 	ADCSRA |= (1<<ADSC);
-	while (ADSC != 0)
+	while ((ADCSRA & (1<<ADSC)) != 0)
 	{
 	}
 	return ADCH;
@@ -56,13 +56,17 @@ void forward()
 }
 void reverse()
 {
-	PORTB |= (1<<FORWARD);
-	PORTD &= ~(1<<REVERSE);
+	PORTB &= ~(1<<FORWARD);
+	PORTD |= (1<<REVERSE);
 }
 void gas(uint8_t speed)
-{
-	PORTB |= (1<<PB3);
-	_delay_ms(500);
+{	
+	//speed *= 10;
+	for (speed; speed > 0; speed--)
+	{
+		 PORTB |= (1<<PB3);
+	}
+	  PORTB &= ~(1<<PB3);
 }
 
 int main(void)
@@ -73,18 +77,23 @@ int main(void)
 	DDRB |= (1<<PB3) | (1<<PB0); //PB 3 = Arduinopin 11 (PWM), PB0 = Arduino pin 8.
 	DDRD |= (1<<PD7); //PD7 = Arduinopin 7
 	ADC_Init();
-	
+	PORTB = (1<<PB3) | (1<<PB0);
+	PORTD = (1<<PD7);
 	/* Main program */
     while (1) 
     {
 		
-		Input_volt = ADC_read();	
-		forward();
-		gas(Input_volt);
+		Input_volt = ADC_read();	//Value 0-255. (8 bit number)
 		reverse();
-		gas(Input_volt);
-		_delay_ms(500);
+		//forward();
+		PORTB |= (1<<PB3);
+		//gas(Input_volt);
+		//_delay_ms(1000);
+		//reverse();
+		//gas(Input_volt);
+		//_delay_ms(1000);
+		
+		
 		
     }
 }
-
